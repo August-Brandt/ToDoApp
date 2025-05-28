@@ -1,47 +1,43 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref } from 'vue'
+
+const name = "August";
+const clicks = ref(0);
+const tasks = ref(["Make dinner", "Play CS with Theis", "Go to sleep"]);
+const newTodo = ref('');
+
+const clicking = () => { 
+  console.log("Button clicked");
+  clicks.value++;
+};
+
+const addTodo = () => {
+  if (newTodo.value.trim() !== '') {
+    tasks.value.push(newTodo.value.trim());
+  }
+  newTodo.value = '';
+};
+
+const removeTodo = (index) => {
+  tasks.value.splice(index, 1);
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <h1>Vue ToDo</h1>
+  <h3>Hello {{ name }}</h3>
+  <button @click="clicking">Clicked {{ clicks }} times</button>
+  <form @submit.prevent="addTodo">
+    <label for="newTodo">Add ToDo</label>
+    <input type="text" id="newTodo" name="newTodo" v-model="newTodo">
+    <button type="submit">Add Todo</button>
+  </form>
+  <ul class="ml-3">
+    <li v-for="(task, index) in tasks" :key="task"> 
+      <button @click="removeTodo(index)" class="mr-2 bg-gray-300 center text-red-600 border-2 rounded-sm text-center align-middle w-5 h-5 font-bold">x</button>
+      <span class="font-bold underline">
+        {{ task }}
+      </span>
+    </li>
+  </ul>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
