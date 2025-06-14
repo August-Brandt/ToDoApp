@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import Navbar from '@/components/Navbar.vue'
 import Hero from '@/components/Hero.vue'
+import ToDoCards from './components/ToDoCards.vue'
 
 const name = "August";
 const clicks = ref(0);
@@ -28,5 +29,5 @@ const removeTodo = (index) => {
 <template>
   <Navbar/>
   <Hero/>
-  
+  <ToDoCards/>
 </template>
