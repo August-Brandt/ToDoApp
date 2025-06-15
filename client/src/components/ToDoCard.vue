@@ -4,12 +4,18 @@ import { defineProps } from "vue";
 
 defineProps({
     todo: Object,
+    removeCallBack: Function,
 });
 </script>
 
 <template>
     <Card>
-        <h1 class="text-lg font-bold">{{ todo.title }}</h1>
+        <div class="grid grid-cols-5">
+            <h1 class="text-lg font-bold col-span-4">{{ todo.title }}</h1>
+            <button class="bg-gray-300 col-start-5 w-7 rounded-lg" @click="removeCallBack">
+                <img src="@/assets/img/TrashCan.png" alt="">
+            </button>
+        </div>
         <p>
             {{ todo.description }}
         </p>
