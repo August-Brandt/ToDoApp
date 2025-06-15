@@ -1,6 +1,10 @@
 <script setup>
 import Card from "@/components/Card.vue";
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
+
+const changeFinished = (todo) => {
+    todo.finished = !todo.finished;
+}
 
 defineProps({
     todo: Object,
@@ -9,14 +13,24 @@ defineProps({
 </script>
 
 <template>
-    <Card>
+    <Card @click="() => changeFinished(todo)">
         <div class="grid grid-cols-5">
-            <h1 class="text-lg font-bold col-span-4">{{ todo.title }}</h1>
-            <button class="bg-gray-300 col-start-5 w-7 rounded-lg" @click="removeCallBack">
-                <img src="@/assets/img/TrashCan.png" alt="">
-            </button>
+            <h1 v-if="todo.finished" class="text-lg font-bold col-span-4 line-through text-gray-400">
+                {{ todo.title }}
+            </h1>
+            <h1 v-else class="text-lg font-bold col-span-4">
+                {{ todo.title }}
+            </h1>
+            <div class=" col-start-5 text-right">
+                <button class="bg-gray-300 w-7 rounded-lg hover:bg-gray-400 hover:shadow" @click="removeCallBack">
+                    <img src="@/assets/img/TrashCan.png" alt="Remove button">
+                </button>
+            </div>
         </div>
-        <p>
+        <p v-if="todo.finished" class="line-through text-gray-500">
+            {{ todo.description }}
+        </p>
+        <p v-else>
             {{ todo.description }}
         </p>
         <div class="border border-gray-300 mt-2"></div>

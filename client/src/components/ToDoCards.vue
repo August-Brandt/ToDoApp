@@ -4,7 +4,6 @@ import todoData from "@/todos.json";
 import { ref } from 'vue';
 
 const todos = ref(todoData);
-console.log(todos.value);
 
 const removeTodo = (index) => {
     todos.value.splice(index, 1);
