@@ -4,32 +4,38 @@ import Navbar from '@/components/Navbar.vue'
 import Hero from '@/components/Hero.vue'
 import ToDoCards from './components/ToDoCards.vue'
 import AddTodo from './components/AddTodo.vue';
+import todoData from "@/todos.json";
+import { v4 } from 'uuid';
 
-const name = "August";
-const clicks = ref(0);
-const tasks = ref(["Make dinner", "Play CS with Theis", "Go to sleep"]);
-const newTodo = ref('');
 
-const clicking = () => { 
-  console.log("Button clicked");
-  clicks.value++;
+const todos = ref(todoData);
+
+const addTodo = (newTodo) => {
+    todos.value.push({
+        id: v4(),
+        finished: false,
+        ...newTodo,
+    });
 };
 
-const addTodo = () => {
-  if (newTodo.value.trim() !== '') {
-    tasks.value.push(newTodo.value.trim());
-  }
-  newTodo.value = '';
-};
-
-const removeTodo = (index) => {
-  tasks.value.splice(index, 1);
+const removeTodo = (id) => {
+    todos.value = todos.value.filter((todo) => {
+        return todo.id != id;
+    });
 }
+
+const toggleFinished = (id) => {
+    const todo = todos.value.find(t => t.id === id);
+    if (todo) {
+        todo.finished = !todo.finished;
+    }
+};
+
 </script>
 
 <template>
-  <Navbar/>
-  <Hero/>
-  <AddTodo/>
-  <ToDoCards/>
+    <Navbar/>
+    <Hero/>
+    <AddTodo @add="addTodo"/>
+    <ToDoCards :todos="todos" @remove="removeTodo" @toggle="toggleFinished"/>
 </template>

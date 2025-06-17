@@ -1,18 +1,16 @@
 <script setup>
 import ToDoCard from "./ToDoCard.vue";
-import todoData from "@/todos.json";
-import { ref, computed } from 'vue';
 
-const todos = ref(todoData);
+import { defineProps, defineEmits, computed } from 'vue';
 
-const removeTodo = (id) => {
-    todos.value = todos.value.filter((todo) => {
-        return todo.id != id;
-    });
-}
+const props = defineProps({
+    todos: Array,
+});
+
+const emit = defineEmits(['remove', 'toggle']);
  
 const sortedTodos = computed(() => {
-    todos.value.sort(( a, b ) => {
+    props.todos.sort(( a, b ) => {
         if (a.finished && b.finished) {
             return 0;
         }
@@ -21,8 +19,7 @@ const sortedTodos = computed(() => {
         }
         return -1;
     });
-    console.log(todos);
-    return todos.value;
+    return props.todos;
 });
 
 </script>
@@ -30,7 +27,7 @@ const sortedTodos = computed(() => {
 <template>
 <section class="p-6">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-6">
-        <ToDoCard v-for="todo in sortedTodos" :key="todo.id" :todo="todo" :removeCallBack="() => removeTodo(todo.id)"/>
+        <ToDoCard v-for="todo in sortedTodos" :key="todo.id" :todo="todo" :removeCallBack="() => emit('remove', todo.id)" @click="emit('toggle', todo.id)"/>
     </div>
 </section>
 

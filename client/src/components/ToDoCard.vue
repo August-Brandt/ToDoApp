@@ -2,10 +2,6 @@
 import Card from "@/components/Card.vue";
 import { defineProps, ref } from "vue";
 
-const changeFinished = (todo) => {
-    todo.finished = !todo.finished;
-}
-
 defineProps({
     todo: Object,
     removeCallBack: Function,
@@ -13,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-    <Card @click="() => changeFinished(todo)">
+    <Card>
         <div class="grid grid-cols-5">
             <h1 v-if="todo.finished" class="text-lg font-bold col-span-4 line-through text-gray-400">
                 {{ todo.title }}
