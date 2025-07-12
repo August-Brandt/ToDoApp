@@ -54,5 +54,7 @@ func todosHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+
 	w.Write(result)
 }
