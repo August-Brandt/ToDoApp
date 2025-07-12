@@ -93,3 +93,16 @@ func GetTodos(db *sql.DB) ([]*Todo, error) {
 	}
 	return todos, nil
 }
+
+func FinishTodo(db *sql.DB, id int) error {
+	stmt := `
+	UPDATE todos
+	SET finished = 1
+	WHERE id=?;
+	`
+	_, err := db.Exec(stmt, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
