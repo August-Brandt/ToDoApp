@@ -106,3 +106,16 @@ func FinishTodo(db *sql.DB, id int) error {
 	}
 	return nil
 }
+
+func UnfinishTodo(db *sql.DB, id int) error {
+	stmt := `
+	UPDATE todos
+	SET finished = 0
+	WHERE id=?;
+	`
+	_, err := db.Exec(stmt, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
