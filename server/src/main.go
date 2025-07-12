@@ -70,3 +70,26 @@ func AddTodo(db *sql.DB, todo *Todo) error {
 
 	return nil
 }
+
+func GetTodos(db *sql.DB) ([]*Todo, error) {
+	stmt := `
+	SELECT * FROM todos;
+	`
+	
+	rows, err := db.Query(stmt)
+	if err != nil {
+		return make([]*Todo, 0), err
+	}
+	defer rows.Close()
+	
+	todos := []*Todo{}
+	for rows.Next() {
+		todo := &Todo{}
+		err = rows.Scan(&todo.Id, &todo.Title, &todo.Description, &todo.Dodate, &todo.Finished)
+		if err != nil {
+			return todos, err
+		}
+		todos = append(todos, todo)
+	}
+	return todos, nil
+}
