@@ -5,11 +5,11 @@ import (
 )
 
 type Todo struct {
-	Id          int
-	Title       string
-	Description string
-	Dodate      string
-	Finished    bool
+	Id          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Dodate      string `json:"doDate"`
+	Finished    bool   `json:"finished"`
 }
 
 func Setup(databaseVersion, connection string) (*sql.DB, error) {
