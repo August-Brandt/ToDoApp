@@ -1,14 +1,14 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Navbar from '@/components/Navbar.vue'
 import Hero from '@/components/Hero.vue'
 import ToDoCards from './components/ToDoCards.vue'
 import AddTodo from './components/AddTodo.vue';
-import todoData from "@/todos.json";
 import { v4 } from 'uuid';
+import axios from 'axios';
 
 
-const todos = ref(todoData);
+const todos = ref([]);
 
 const addTodo = (newTodo) => {
     todos.value.push({
@@ -30,6 +30,15 @@ const toggleFinished = (id) => {
         todo.finished = !todo.finished;
     }
 };
+
+onMounted(async () => {
+    try {
+        const response = await axios.get("http://localhost:8080/api/todos");
+        todos.value = response.data;
+    } catch (error) {
+        console.error("Error fetching todos", error);
+    }
+})
 
 </script>
 
