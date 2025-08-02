@@ -15,7 +15,7 @@ func Setup(databaseVersion, connection string) (*sql.DB, error) {
 	// Init tables if not exists
 	tableStmt := `
 	CREATE TABLE IF NOT EXISTS todos (
-		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		id TEXT NOT NULL PRIMARY KEY,
 		title TEXT NOT NULL,
 		description TEXT NOT NULL,
 		dodate TEXT,
@@ -32,10 +32,10 @@ func Setup(databaseVersion, connection string) (*sql.DB, error) {
 
 func AddTodo(db *sql.DB, todo *Todo) error {
 	stmt := `
-	INSERT INTO todos (title, description, dodate, finished)
-	VALUES (?, ?, ?, 0);
+	INSERT INTO todos (id, title, description, dodate, finished)
+	VALUES (?, ?, ?, ?, 0);
 	`
-	_, err := db.Exec(stmt, todo.Title, todo.Description, todo.Dodate)
+	_, err := db.Exec(stmt, todo.Id, todo.Title, todo.Description, todo.Dodate)
 	if err != nil {
 		return err
 	}
