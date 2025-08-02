@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"ToDoServer/tododatabase"
+	. "ToDoServer/datatypes"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -28,6 +29,7 @@ func main() {
 	fs := http.FileServer(http.Dir("../../client/dist"))
 	http.Handle("/", fs)
 	http.HandleFunc("GET /api/todos", todosHandler)
+	http.HandleFunc("POST /api/newtodo", newTodoHandler)
 
 	port, exists := os.LookupEnv("PORT")
 	if exists {
@@ -55,6 +57,33 @@ func todosHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+
+	w.Write(result)
+}
+
+func newTodoHandler(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var todo Todo
+	err := decoder.Decode(&todo)
+	if err != nil {
+		log.Fatal("Unable to decode request into struct")
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	err = tododatabase.AddTodo(db, &todo)
+	if err != nil {
+		log.Fatal("Unable to add new todo")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
+	result, err := json.Marshal(todo)
+	if err != nil {
+		log.Fatal("Unable to marshal newly created todo")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Access-Controll-Allow-Origin", "http://localhost:5173")
 
 	w.Write(result)
 }
