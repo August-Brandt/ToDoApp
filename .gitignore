@@ -4,6 +4,7 @@
 
 # Server ignores
 go.sum
+*.db
 
 # Vue Generated gitignore
 # Logs
