@@ -8,9 +8,10 @@ import (
 	"net/http"
 	"os"
 
-	"ToDoServer/tododatabase"
 	. "ToDoServer/datatypes"
+	"ToDoServer/tododatabase"
 
+	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -29,7 +30,7 @@ func main() {
 	fs := http.FileServer(http.Dir("../../client/dist"))
 	http.Handle("/", fs)
 	http.HandleFunc("GET /api/todos", todosHandler)
-	http.HandleFunc("POST /api/newtodo", newTodoHandler)
+	http.HandleFunc("/api/newtodo", newTodoHandler)
 
 	port, exists := os.LookupEnv("PORT")
 	if exists {
@@ -62,28 +63,46 @@ func todosHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func newTodoHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.Method != http.MethodPost && r.Method != http.MethodOptions {
+		log.Fatal("Invalid method used for /api/newtodo")
+		http.Error(w, "Invalid method used", http.StatusMethodNotAllowed)
+		return
+	}
+
 	decoder := json.NewDecoder(r.Body)
-	var todo Todo
-	err := decoder.Decode(&todo)
+	todo := &Todo{}
+
+	err := decoder.Decode(todo)
 	if err != nil {
 		log.Fatal("Unable to decode request into struct")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = tododatabase.AddTodo(db, &todo)
+	todo.Id = uuid.NewString()
+	id, err := tododatabase.AddTodo(db, todo)
 	if err != nil {
-		log.Fatal("Unable to add new todo")
+		log.Fatalf("Unable to add new todo\n%v\n", err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
-	result, err := json.Marshal(todo)
+
+	newTodo, err := tododatabase.GetTodoById(db, id)
+	if err != nil {
+		log.Fatalf("Unable to retreve newly added todo\n%v\n", err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	result, err := json.Marshal(newTodo)
 	if err != nil {
 		log.Fatal("Unable to marshal newly created todo")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Access-Controll-Allow-Origin", "http://localhost:5173")
 
+	log.Println("Added new todo to database")
 	w.Write(result)
 }

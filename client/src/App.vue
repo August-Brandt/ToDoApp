@@ -4,18 +4,25 @@ import Navbar from '@/components/Navbar.vue'
 import Hero from '@/components/Hero.vue'
 import ToDoCards from './components/ToDoCards.vue'
 import AddTodo from './components/AddTodo.vue';
-import { v4 } from 'uuid';
 import axios from 'axios';
 
 
 const todos = ref([]);
 
-const addTodo = (newTodo) => {
-    todos.value.push({
-        id: v4(),
-        finished: false,
-        ...newTodo,
-    });
+const addTodo = async (newTodo) => {
+    try {
+        const response = await axios.post("http://localhost:8080/api/newtodo", 
+            JSON.stringify({
+                id: "",
+                title: newTodo.title,
+                description: newTodo.description,
+                doDate: newTodo.doDate,
+                finished: false,
+            }));
+        todos.value.push(response.data);
+    } catch (error) {
+        console.error("Error creating new todo", error);
+    }
 };
 
 const removeTodo = (id) => {

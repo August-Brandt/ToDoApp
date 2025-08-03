@@ -30,17 +30,17 @@ func Setup(databaseVersion, connection string) (*sql.DB, error) {
 	return db, nil
 }
 
-func AddTodo(db *sql.DB, todo *Todo) error {
+func AddTodo(db *sql.DB, todo *Todo) (string, error) {
 	stmt := `
 	INSERT INTO todos (id, title, description, dodate, finished)
 	VALUES (?, ?, ?, ?, 0);
 	`
 	_, err := db.Exec(stmt, todo.Id, todo.Title, todo.Description, todo.Dodate)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return todo.Id, nil
 }
 
 func GetTodos(db *sql.DB) ([]*Todo, error) {
@@ -90,4 +90,19 @@ func UnfinishTodo(db *sql.DB, id int) error {
 		return err
 	}
 	return nil
+}
+
+func GetTodoById(db *sql.DB, id string) (*Todo, error) {
+	stmt := `
+	SELECT * FROM todos WHERE id=?;
+	`
+
+	row := db.QueryRow(stmt, id)
+	
+	todo := &Todo{}
+	err := row.Scan(&todo.Id, &todo.Title, &todo.Description, &todo.Dodate, &todo.Finished)
+	if err != nil {
+		return nil, err
+	}
+	return todo, nil
 }
