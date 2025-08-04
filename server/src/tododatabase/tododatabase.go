@@ -66,7 +66,7 @@ func GetTodos(db *sql.DB) ([]*Todo, error) {
 	return todos, nil
 }
 
-func FinishTodo(db *sql.DB, id int) error {
+func FinishTodo(db *sql.DB, id string) error {
 	stmt := `
 	UPDATE todos
 	SET finished = 1
@@ -79,7 +79,7 @@ func FinishTodo(db *sql.DB, id int) error {
 	return nil
 }
 
-func UnfinishTodo(db *sql.DB, id int) error {
+func UnfinishTodo(db *sql.DB, id string) error {
 	stmt := `
 	UPDATE todos
 	SET finished = 0
