@@ -41,7 +41,6 @@ const removeTodo = async (id) => {
 
 const toggleFinished = async (id) => {
     const todo = todos.value.find(t => t.id === id);
-    console.log("Hello there");
     if (todo) {
         if (!todo.finished) {
             try {
@@ -54,10 +53,18 @@ const toggleFinished = async (id) => {
                 console.error("Error finishing todo", error);
             }
         } else {
+            try {
+            const response = await axios.post("http://localhost:8080/api/unfinishtodo",
+                JSON.stringify({
+                    id: id
+                }));
             todo.finished = false;
+            } catch (error) {
+                console.error("Error unfinishing todo", error);
+            }
         }
     } else {
-        console.log("Unable to find todo with that id", todo);
+        console.Error("Unable to find todo with that id", todo);
     }
 };
 
