@@ -106,3 +106,17 @@ func GetTodoById(db *sql.DB, id string) (*Todo, error) {
 	}
 	return todo, nil
 }
+
+func RemoveTodoById(db *sql.DB, id string) error {
+	stmt := `
+	DELETE FROM todos
+	WHERE id=?;
+	`
+
+	_, err := db.Exec(stmt, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

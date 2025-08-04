@@ -25,10 +25,18 @@ const addTodo = async (newTodo) => {
     }
 };
 
-const removeTodo = (id) => {
-    todos.value = todos.value.filter((todo) => {
-        return todo.id != id;
-    });
+const removeTodo = async (id) => {
+    try {
+        const response = await axios.post("http://localhost:8080/api/removetodo", 
+            JSON.stringify({
+                id: id
+            }));
+        todos.value = todos.value.filter((todo) => {
+            return todo.id != id;
+        });
+    } catch (error) {
+        console.error("Error creating new todo", error);
+    }
 }
 
 const toggleFinished = (id) => {
