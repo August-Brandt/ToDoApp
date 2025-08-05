@@ -26,7 +26,7 @@ func main() {
 	}
 	defer db.Close()
 
-	// Run web server
+	// Setup endpoints server
 	fs := http.FileServer(http.Dir("../../client/dist"))
 	http.Handle("/", fs)
 	http.HandleFunc("GET /api/todos", todosHandler)
@@ -35,6 +35,7 @@ func main() {
 	http.HandleFunc("/api/finishtodo", finishTodoHandler)
 	http.HandleFunc("/api/unfinishtodo", UnfinishTodoHandle)
 
+	// Start webserver
 	port, exists := os.LookupEnv("PORT")
 	if exists {
 		port = ":" + port
