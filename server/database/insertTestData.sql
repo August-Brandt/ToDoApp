@@ -1,3 +1,11 @@
+CREATE TABLE IF NOT EXISTS todos (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    dodate TEXT,
+    finished INTEGER NOT NULL
+);
+
 INSERT INTO todos (id, title, description, dodate, finished)
 VALUES ("1", "Todo 1", "Description of this todo", "2025-08-25", 0);
 
