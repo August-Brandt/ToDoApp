@@ -27,13 +27,14 @@ func main() {
 	defer db.Close()
 
 	// Setup endpoints server
+	mux := http.NewServeMux()
 	fs := http.FileServer(http.Dir("../../client/dist"))
-	http.Handle("/", fs)
-	http.HandleFunc("GET /api/todos", todosHandler)
-	http.HandleFunc("/api/newtodo", newTodoHandler)
-	http.HandleFunc("/api/removetodo", removeTodoHandler)
-	http.HandleFunc("/api/finishtodo", finishTodoHandler)
-	http.HandleFunc("/api/unfinishtodo", UnfinishTodoHandle)
+	mux.Handle("/", fs)
+	mux.HandleFunc("/api/newtodo", newTodoHandler)
+	mux.HandleFunc("/api/removetodo", removeTodoHandler)
+	mux.HandleFunc("/api/finishtodo", finishTodoHandler)
+	mux.HandleFunc("/api/unfinishtodo", UnfinishTodoHandle)
+	mux.HandleFunc("GET /api/todos", todosHandler)
 
 	// Start webserver
 	port, exists := os.LookupEnv("PORT")
@@ -45,7 +46,7 @@ func main() {
 	fmt.Printf("Website can be found at http://localhost%s\n", port)
 
 	log.Printf("Server running on port %s\n", port)
-	log.Fatal(http.ListenAndServe(port, nil))
+	log.Fatal(http.ListenAndServe(port, mux))
 }
 
 func todosHandler(w http.ResponseWriter, r *http.Request) {
