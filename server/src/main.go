@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	. "ToDoServer/datatypes"
+	dt "ToDoServer/datatypes"
 	"ToDoServer/tododatabase"
 
 	"github.com/google/uuid"
@@ -79,7 +79,7 @@ func newTodoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	decoder := json.NewDecoder(r.Body)
-	todo := &Todo{}
+	todo := &dt.Todo{}
 
 	err := decoder.Decode(todo)
 	if err != nil {
@@ -124,7 +124,7 @@ func removeTodoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	decoder := json.NewDecoder(r.Body)
-	todo := &Todo{}
+	todo := &dt.Todo{}
 
 	err := decoder.Decode(todo)
 	if err != nil {
@@ -156,7 +156,7 @@ func finishTodoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	decoder := json.NewDecoder(r.Body)
-	todo := &Todo{}
+	todo := &dt.Todo{}
 
 	err := decoder.Decode(todo)
 	if err != nil {
@@ -188,7 +188,7 @@ func UnfinishTodoHandle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	decoder := json.NewDecoder(r.Body)
-	todo := &Todo{}
+	todo := &dt.Todo{}
 
 	err := decoder.Decode(todo)
 	if err != nil {
