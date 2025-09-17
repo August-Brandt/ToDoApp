@@ -24,20 +24,19 @@ import (
 
 type TodoApp struct{}
 
-// Returns a container that echoes whatever string argument is provided
 func (m *TodoApp) Publish(
 	ctx context.Context,
 	// +defaultPath="/"
 	source *dagger.Directory,
 ) (string, error) {
-	client := m.BuildClient(source.Directory("./client"))
-	server := m.BuildServer(source.Directory("./server/src"))
+	client := m.BuildClient(source.Directory("client"))
+	server := m.BuildServer(source.Directory("server/src"))
 
 	return dag.Container().
 		From("ubuntu:latest").
 		WithDirectory("/app/client/dist/", client).
 		WithFile("/app/server/src/server", server).
-		WithFile("/app/server/database/ToDoDatabase.db", source.File("./server/database/ToDoDatabase.db")).
+		WithExec([]string{"cp", "server/database/ToDoDatabase.db", "/app/server/database/ToDoDatabase.db"}).
 		WithExposedPort(8080).
 		WithWorkdir("/app/server/src").
 		WithEntrypoint([]string{"./server"}).
