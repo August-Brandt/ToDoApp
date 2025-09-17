@@ -68,5 +68,5 @@ func (m *TodoApp) ServerBuildEnv(source *dagger.Directory) *dagger.Container {
 		From("golang:1.22").
 		WithDirectory("/server/src", source).
 		WithWorkdir("/server/src").
-		WithExec([]string{"go", "mod", "download"})
+		WithExec([]string{"go", "mod", "tidy"})
 }
