@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"log"
 
 	"ToDoServer/todoServer"
 	"ToDoServer/tododatabase"
@@ -21,5 +22,7 @@ func main() {
 	defer db.Close()
 
 	server := todoServer.NewServer(":8080", db, "../../client/dist")
-	server.Run()
+	if err := server.Run(); err != nil {
+		log.Printf("Server stopped: %s\n", err.Error())
+	}
 }
