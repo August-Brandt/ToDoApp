@@ -15,11 +15,11 @@ func (s *ToDoServer) SetRoutes(mux *http.ServeMux) {
 	mux.Handle("GET /", http.FileServer(http.Dir(s.frontEnd)))
 	
 	// API handlers
-	mux.HandleFunc("GET /api/todos", s.todosHandler)
-	mux.HandleFunc("POST /api/addtodo", s.newTodoHandler)
-	mux.HandleFunc("DELETE /api/removetodo/{todoID}", s.removeTodoHandler)
-	mux.HandleFunc("PATCH /api/finishtodo/{todoID}", s.finishTodoHandler)
-	mux.HandleFunc("PATCH /api/unfinishtodo/{todoID}", s.unfinishTodoHandle)
+	mux.HandleFunc("GET /api/todos", loggingMiddleware(s.todosHandler))
+	mux.HandleFunc("POST /api/addtodo", loggingMiddleware(s.newTodoHandler))
+	mux.HandleFunc("DELETE /api/removetodo/{todoID}", loggingMiddleware(s.removeTodoHandler))
+	mux.HandleFunc("PATCH /api/finishtodo/{todoID}", loggingMiddleware(s.finishTodoHandler))
+	mux.HandleFunc("PATCH /api/unfinishtodo/{todoID}", loggingMiddleware(s.unfinishTodoHandle))
 }
 
 func (s *ToDoServer) todosHandler(w http.ResponseWriter, r *http.Request) {
