@@ -27,6 +27,7 @@ type TodoApp struct{}
 func (m *TodoApp) Publish(
 	ctx context.Context,
 	// +defaultPath="/"
+	// +ignore=["**.sum"]
 	source *dagger.Directory,
 ) (string, error) {
 	client := m.BuildClient(source.Directory("client"))
@@ -36,7 +37,7 @@ func (m *TodoApp) Publish(
 		From("ubuntu:latest").
 		WithDirectory("/app/client/dist/", client).
 		WithFile("/app/server/src/server", server).
-		WithExec([]string{"cp", "server/database/ToDoDatabase.db", "/app/server/database/ToDoDatabase.db"}).
+		WithFile("/app/server/database/ToDoDatabase.db", source.File("server/database/ToDoDatabase.db")).
 		WithExposedPort(8080).
 		WithWorkdir("/app/server/src").
 		WithEntrypoint([]string{"./server"}).
