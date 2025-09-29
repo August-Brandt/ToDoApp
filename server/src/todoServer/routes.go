@@ -35,7 +35,6 @@ func (s *ToDoServer) todosHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
 
 	w.Write(result)
 }
@@ -76,16 +75,6 @@ func (s *ToDoServer) newTodoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ToDoServer) removeTodoHandler(w http.ResponseWriter, r *http.Request) {
-	// decoder := json.NewDecoder(r.Body)
-	// todo := &dt.Todo{}
-
-	// err := decoder.Decode(todo)
-	// if err != nil {
-	// 	log.Fatalf("Unable to decode request body\n%v\n", err.Error())
-	// 	http.Error(w, err.Error(), http.StatusBadRequest)
-	// 	return
-	// }
-
 	id := r.PathValue("todoID")
 
 	err := tododatabase.RemoveTodoById(s.DB, id)
@@ -100,18 +89,7 @@ func (s *ToDoServer) removeTodoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ToDoServer) finishTodoHandler(w http.ResponseWriter, r *http.Request) {
-	// decoder := json.NewDecoder(r.Body)
-	// todo := &dt.Todo{}
-
 	id := r.PathValue("todoID")
-
-	// err := decoder.Decode(todo)
-	// if err != nil {
-	// 	log.Fatalf("Unable to decode request body\n%v\n", err.Error())
-	// 	http.Error(w, err.Error(), http.StatusBadRequest)
-	// 	return
-	// }
-
 	err := tododatabase.FinishTodo(s.DB, id)
 	if err != nil {
 		log.Fatalf("Unable to update todo\n%v\n", err.Error())
