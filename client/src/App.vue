@@ -27,7 +27,7 @@ const addTodo = async (newTodo) => {
 
 const removeTodo = async (id) => {
     try {
-        const response = await axios.delete("http://localhost:8080/api/removetodo/" + id);
+        const response = await axios.post("http://localhost:8080/api/removetodo/" + id);
         todos.value = todos.value.filter((todo) => {
             return todo.id != id;
         });
@@ -41,14 +41,14 @@ const toggleFinished = async (id) => {
     if (todo) {
         if (!todo.finished) {
             try {
-                const response = await axios.patch("http://localhost:8080/api/finishtodo/" + id);
+                const response = await axios.post("http://localhost:8080/api/finishtodo/" + id);
                 todo.finished = true;
             } catch (error) {
                 console.error("Error finishing todo", error);
             }
         } else {
             try {
-                const response = await axios.patch("http://localhost:8080/api/unfinishtodo/" + id);
+                const response = await axios.post("http://localhost:8080/api/unfinishtodo/" + id);
                 todo.finished = false;
             } catch (error) {
                 console.error("Error unfinishing todo", error);

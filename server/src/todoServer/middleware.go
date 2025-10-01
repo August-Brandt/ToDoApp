@@ -8,7 +8,7 @@ import (
 type Middleware func(http.HandlerFunc) http.HandlerFunc
 
 func ApplyMiddlewareChain(handler http.HandlerFunc, middlewares ...Middleware) http.HandlerFunc {
-	for i := 0; i < len(middlewares)-1; i++ {
+	for i := 0; i < len(middlewares); i++ {
 		handler = middlewares[i](handler)
 	}
 	return handler
