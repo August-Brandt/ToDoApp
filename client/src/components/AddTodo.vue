@@ -5,6 +5,7 @@ const emit = defineEmits(['add']);
 
 const title = ref('');
 const description = ref('');
+const dodate = ref('');
 
 const addTodo = () => {
     emit('add', {
@@ -26,6 +27,7 @@ const addTodo = () => {
                 <div class="md:col-span-2 grid grid-rows-3 gap-2">
                     <input type="text" name="titel" v-model="title" class="bg-gray-100 rounded-lg px-2 h-6"/>
                     <textarea name="description" v-model="description" class="bg-gray-100 rounded-lg px-2 row-span-2 row-start-2 resize-none"></textarea>
+                    <input type="date" name="dodate" v-model="dodate" class="bg-gray-100 rounded-lg px-2 h-7">
                 </div>
                 <div class="flex align-center items-center justify-center">
                     <button type="submit" class="rounded-lg bg-gray-100 px-2 py-0.5 hover:bg-gray-300 hover:shadow">Add ToDo</button>
