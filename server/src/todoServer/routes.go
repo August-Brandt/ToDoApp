@@ -1,8 +1,8 @@
 package todoServer
 
 import (
-	"ToDoServer/tododatabase"
 	dt "ToDoServer/datatypes"
+	"ToDoServer/tododatabase"
 
 	"encoding/json"
 	"log"
@@ -13,13 +13,18 @@ import (
 
 func (s *ToDoServer) SetRoutes(mux *http.ServeMux) {
 	mux.Handle("GET /", http.FileServer(http.Dir(s.frontEnd)))
-	
+
+	var middlewareChain []Middleware
+
+	middlewareChain = append(middlewareChain, loggingMiddleware)
+	middlewareChain = append(middlewareChain, corsMiddleware)
+
 	// API handlers
-	mux.HandleFunc("GET /api/todos", loggingMiddleware(s.todosHandler))
-	mux.HandleFunc("POST /api/addtodo", loggingMiddleware(s.newTodoHandler))
-	mux.HandleFunc("DELETE /api/removetodo/{todoID}", loggingMiddleware(s.removeTodoHandler))
-	mux.HandleFunc("PATCH /api/finishtodo/{todoID}", loggingMiddleware(s.finishTodoHandler))
-	mux.HandleFunc("PATCH /api/unfinishtodo/{todoID}", loggingMiddleware(s.unfinishTodoHandle))
+	mux.HandleFunc("GET /api/todos", ApplyMiddlewareChain(s.todosHandler, middlewareChain...))
+	mux.HandleFunc("POST /api/addtodo", ApplyMiddlewareChain(s.newTodoHandler, middlewareChain...))
+	mux.HandleFunc("DELETE /api/removetodo/{todoID}", ApplyMiddlewareChain(s.removeTodoHandler, middlewareChain...))
+	mux.HandleFunc("PATCH /api/finishtodo/{todoID}", ApplyMiddlewareChain(s.finishTodoHandler, middlewareChain...))
+	mux.HandleFunc("PATCH /api/unfinishtodo/{todoID}", ApplyMiddlewareChain(s.unfinishTodoHandle, middlewareChain...))
 }
 
 func (s *ToDoServer) todosHandler(w http.ResponseWriter, r *http.Request) {
