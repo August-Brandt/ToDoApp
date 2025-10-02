@@ -11,10 +11,11 @@ const addTodo = () => {
     emit('add', {
         title: title.value, 
         description: description.value,
-        doDate: "2025-6-20",
+        doDate: dodate.value,
     });
     title.value = "";
     description.value = "";
+    dodate.value = "";
 }
 
 </script>
