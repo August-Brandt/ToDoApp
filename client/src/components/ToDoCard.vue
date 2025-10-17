@@ -2,6 +2,19 @@
 import Card from "@/components/Card.vue";
 import { defineProps, ref } from "vue";
 
+const isToday = (dateString) => {
+    const date = new Date(Date.parse(dateString));
+    const dateNow = new Date(Date.now());
+    if (date.getFullYear() == dateNow.getFullYear() && 
+        date.getMonth() == dateNow.getMonth() && 
+        date.getDate() == dateNow.getDate()) 
+    {
+        return true;    
+    } else {
+        return false;
+    }
+}
+
 defineProps({
     todo: Object,
     removeCallBack: Function,
@@ -29,7 +42,16 @@ defineProps({
         <p v-else>
             {{ todo.description }}
         </p>
-        <div v-if="todo.doDate" class="border border-gray-300 mt-2"></div>
-        <h3 v-if="todo.doDate" class="text-sm text-gray-500">Finish by: {{ todo.doDate }}</h3>
+        <div v-if="todo.doDate">
+            <div class="border border-gray-300 mt-2"></div>
+            <div v-if="todo.finished">
+                <h3 class="line-through text-sm text-gray-400">Finish by: {{ todo.doDate }}</h3>
+            </div>
+            <div v-else>
+                <h3 v-if="isToday(todo.doDate)" class="text-sm text-gray-900">Finish by: {{ todo.doDate }}</h3>
+                <h3 v-else-if="Date.parse(todo.doDate) < Date.now()" class="text-sm font-bold text-red-400">Finish by: {{ todo.doDate }}</h3>
+                <h3 v-else class="text-sm text-gray-400">Finish by: {{ todo.doDate }}</h3>
+            </div>
+        </div>
     </Card>
 </template>
