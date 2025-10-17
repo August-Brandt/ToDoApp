@@ -29,7 +29,7 @@ defineProps({
         <p v-else>
             {{ todo.description }}
         </p>
-        <div class="border border-gray-300 mt-2"></div>
-        <h3 class="text-sm text-gray-500">Finish by: {{ todo.doDate }}</h3>
+        <div v-if="todo.doDate" class="border border-gray-300 mt-2"></div>
+        <h3 v-if="todo.doDate" class="text-sm text-gray-500">Finish by: {{ todo.doDate }}</h3>
     </Card>
 </template>
