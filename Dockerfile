@@ -1,3 +1,4 @@
+# Building the frontend 
 FROM node:lts-alpine AS frontend
 WORKDIR /app
 
@@ -11,7 +12,7 @@ COPY client /app/client/
 
 RUN ["npm", "run", "build"]
 
-
+# Building the server
 FROM golang:1.22 AS server
 WORKDIR /app
 
@@ -23,7 +24,7 @@ RUN ["go", "mod", "tidy"]
 
 RUN ["go", "build", "-o", "server"]
 
-
+# Moving relevant files from build stages and setup final image
 FROM ubuntu:latest
 WORKDIR /TodoApp/app
 
