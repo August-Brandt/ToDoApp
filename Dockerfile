@@ -29,7 +29,6 @@ WORKDIR /TodoApp/app
 
 COPY --from=frontend /app/client/dist ./client/dist
 COPY --from=server /app/server/server ./server/src/
-COPY ./server/database/ToDoDatabase.db ./server/database/
 
 WORKDIR /TodoApp/app/server/src
 
