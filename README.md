@@ -1,0 +1,2 @@
+# ToDoApp
+This project is a simple todo app, with a Vue.js frontend and a Go backend with a Sqlite database. The project is for the sake learning and providing a platform for experimenting with different technologies.
