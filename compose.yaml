@@ -1,6 +1,6 @@
 services:
   webserver:
-    image: todoapp
+    image: ghcr.io/august-brandt/todoapp:latest
     ports:
       - "8080:8080"
     volumes:
