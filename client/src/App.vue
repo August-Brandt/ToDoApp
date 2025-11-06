@@ -11,7 +11,7 @@ const todos = ref([]);
 
 const addTodo = async (newTodo) => {
     try {
-        const response = await axios.post("http://localhost:8080/api/addtodo", 
+        const response = await axios.post("/api/addtodo", 
             JSON.stringify({
                 id: "",
                 title: newTodo.title,
@@ -27,7 +27,7 @@ const addTodo = async (newTodo) => {
 
 const removeTodo = async (id) => {
     try {
-        const response = await axios.post("http://localhost:8080/api/removetodo/" + id);
+        const response = await axios.post("/api/removetodo/" + id);
         todos.value = todos.value.filter((todo) => {
             return todo.id != id;
         });
@@ -41,14 +41,14 @@ const toggleFinished = async (id) => {
     if (todo) {
         if (!todo.finished) {
             try {
-                const response = await axios.post("http://localhost:8080/api/finishtodo/" + id);
+                const response = await axios.post("/api/finishtodo/" + id);
                 todo.finished = true;
             } catch (error) {
                 console.error("Error finishing todo", error);
             }
         } else {
             try {
-                const response = await axios.post("http://localhost:8080/api/unfinishtodo/" + id);
+                const response = await axios.post("/api/unfinishtodo/" + id);
                 todo.finished = false;
             } catch (error) {
                 console.error("Error unfinishing todo", error);
@@ -61,7 +61,7 @@ const toggleFinished = async (id) => {
 
 onMounted(async () => {
     try {
-        const response = await axios.get("http://localhost:8080/api/todos");
+        const response = await axios.get("1/api/todos");
         todos.value = response.data;
     } catch (error) {
         console.error("Error fetching todos", error);
