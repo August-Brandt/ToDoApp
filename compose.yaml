@@ -1,0 +1,8 @@
+services:
+  webserver:
+    image: ghcr.io/august-brandt/todoapp:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server/database/:/TodoApp/app/server/database/
+
