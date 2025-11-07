@@ -61,7 +61,7 @@ const toggleFinished = async (id) => {
 
 onMounted(async () => {
     try {
-        const response = await axios.get("1/api/todos");
+        const response = await axios.get("/api/todos");
         todos.value = response.data;
     } catch (error) {
         console.error("Error fetching todos", error);
