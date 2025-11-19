@@ -96,7 +96,7 @@ func (s *ToDoServer) removeTodoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("Removed todo from database")
-	w.Write([]byte{})
+	w.WriteHeader(http.StatusOK)
 }
 
 func (s *ToDoServer) finishTodoHandler(w http.ResponseWriter, r *http.Request) {
@@ -107,9 +107,8 @@ func (s *ToDoServer) finishTodoHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	log.Println("Updated a todo to be finished")
-	w.Write([]byte{})
+	w.WriteHeader(http.StatusOK)
 }
 
 func (s *ToDoServer) unfinishTodoHandle(w http.ResponseWriter, r *http.Request) {
@@ -122,5 +121,5 @@ func (s *ToDoServer) unfinishTodoHandle(w http.ResponseWriter, r *http.Request) 
 	}
 
 	log.Println("Updated a todo to be unfinished")
-	w.Write([]byte{})
+	w.WriteHeader(http.StatusOK)
 }
