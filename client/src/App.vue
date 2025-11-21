@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import Navbar from '@/components/Navbar.vue'
 import Hero from '@/components/Hero.vue'
 import ToDoCards from './components/ToDoCards.vue'
@@ -59,6 +59,19 @@ const toggleFinished = async (id) => {
     }
 };
 
+const sortedTodos = computed(() => {
+    todos.value.sort(( a, b ) => {
+        if (a.finished && b.finished) {
+            return 0;
+        }
+        if (a.finished && !b.finished) {
+            return 1;
+        }
+        return -1;
+    });
+    return todos.value;
+});
+
 onMounted(async () => {
     try {
         const response = await axios.get("/api/todos");
@@ -74,5 +87,5 @@ onMounted(async () => {
     <Navbar/>
     <Hero/>
     <AddTodo @add="addTodo"/>
-    <ToDoCards :todos="todos" @remove="removeTodo" @toggle="toggleFinished"/>
+    <ToDoCards :todos="sortedTodos" @remove="removeTodo" @toggle="toggleFinished"/>
 </template>
